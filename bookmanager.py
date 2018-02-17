@@ -1,5 +1,6 @@
 #import flask
-from flask import Flask, redirect, render_template, request, url_for
+from functools import wraps
+from flask import Flask, redirect, render_template, request, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -9,6 +10,18 @@ app = Flask(__name__)
 #connect to postgress db
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:8247@localhost/book_data'
 db = SQLAlchemy(app)
+
+#user auth checks if user is logged_in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized,Plese login', 'danger') 
+            return redirect(url_for('login'))  
+    return wrap
+
 #class for creating table book
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,6 +50,26 @@ def post():
 @app.route('/addPost', methods=['POST'])
 def addPost():
     #request form data
+    title = request.form['title']
+    subtitle = request.form['subtitle']
+    author = request.form['author']
+    description = request.form['description']
+
+    #create variable post to add data to db
+    post = Book(title=title, subtitle=subtitle, author=author, description=description, date_posted=datetime.now())
+
+    #commit to db and end session
+    db.session.add(post)
+    db.session.commit()
+    return redirect (url_for('post'))
+
+
+@app.route('/editPost', methods=['GET','POST'])
+def editPost():
+    book = Book.query.get(Book.id)
+    #request form data
+    book.title = 'title'
+    book.subtitle = 'subtitle'
     title = request.form['title']
     subtitle = request.form['subtitle']
     author = request.form['author']
