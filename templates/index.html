@@ -10,12 +10,25 @@
 </head>
 <body>
     <div class="container">
-        <form method="POST" action="" id="Tform">
+        <form method="POST" action="/addPost" id="Tform">
+            <h1>Books</h1>
                 <div class="form-group">
-                <label for="email">Title:</label>
-                <input type="text" class="form-control" id="title" name="title">
+                <label for="title">Title:</label>
+                <input type="text" class="form-control"  name="title">
                 </div>
-                <button type="submit" class="btn btn-success">Submit</button>
+                <div class="form-group">
+                <label for="subtitle">Subtitle:</label>
+                <input type="text" class="form-control"  name="subtitle">
+                </div>
+                <div class="form-group">
+                <label for="author">Author:</label>
+                <input type="text" class="form-control"  name="author">
+                </div>
+                <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea type="text" class="form-control" row=5 name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Submit</button>
         </form>
     </div>
     <script src="../static/js/bootstrap.js"></script>
