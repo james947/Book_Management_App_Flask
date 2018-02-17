@@ -9,7 +9,7 @@ app = Flask(__name__)
 #connect to postgress db
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:8247@localhost/book_data'
 db = SQLAlchemy(app)
-
+#class for creating table book
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
@@ -28,12 +28,12 @@ app.config["SECRET_KEY"] ="b'e3ce76d4483bcce68ddf2067c443e43b87f02a304ab7a80e'"
 @app.route('/index/')
 def index():
     return render_template("index.html")
-
+#routes to post
 @app.route('/post')
 def post():
     books = Book.query.order_by(Book.date_posted.desc()).all()
     return render_template("posts.html", books=books)
-
+#stores form data to db
 @app.route('/addPost', methods=['POST'])
 def addPost():
     #request form data
