@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book manager</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                {% for book in books %}
+                    <h3>{{book.title}}</h3>
+                    <p>{{book.subtitle}}</p>
+                    <p>{{book.description}}</p>
+                    <p class="post-meta">Posted by {{book.author}} on {{ book.date_posted.strftime('%B %d %Y') }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
