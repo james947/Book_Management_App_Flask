@@ -82,6 +82,15 @@ def editPost():
     db.session.add(post)
     db.session.commit()
     return redirect (url_for('post'))
+    
+#Route to delete a specific book by title
+@app.route("/delete", methods=["POST"])
+def delete():
+    title = request.form.get("title")
+    book = Book.query.filter_by(title=title).first()
+    db.session.delete(book)
+    db.session.commit()
+    return redirect("post")
 
 #runs the app
 if __name__ == "__main__":
