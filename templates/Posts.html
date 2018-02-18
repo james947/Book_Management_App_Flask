@@ -26,7 +26,12 @@
                     <p>{{book.subtitle}}</p>
                     <p>{{book.description}}</p>
                     <p class="post-meta">Posted by {{book.author}} on {{ book.date_posted.strftime('%B %d %Y %X') }}</p>
-                     <a href="/editPost" type="btn-btn-primary">Edit</a> <a href="/deletePost" type="btn-btn-danger">Delete</a>
+                     <a href="/editPost" type="btn-btn-primary">Edit</a> 
+
+                     <form method="POST" action="/delete">
+                     <input type="hidden" value="{{book.title}}" name="title">
+                     <input type="submit" class="btn btn-default" value="Delete">
+                     </form>
                     <hr>
                 {% endfor %}
             </div>
