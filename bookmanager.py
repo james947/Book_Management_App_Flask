@@ -3,13 +3,16 @@ from functools import wraps
 from flask import Flask, redirect, render_template, request, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+from forms import SignupForm, LoginForm
 #initializing the app
 app = Flask(__name__)
 
 #connect to postgress db
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:8247@localhost/book_data'
 db = SQLAlchemy(app)
+
+#session seccret key to prevent attacks
+app.config["SECRET_KEY"] ="b'e3ce76d4483bcce68ddf2067c443e43b87f02a304ab7a80e'"
 
 #user auth checks if user is logged_in
 def is_logged_in(f):
@@ -34,13 +37,38 @@ class Book(db.Model):
     def __repr__(self):
         return "<Title: {}>".format(self.title)
 
-#session seccret key
-app.config["SECRET_KEY"] ="b'e3ce76d4483bcce68ddf2067c443e43b87f02a304ab7a80e'"
-
+#routes to signup page
+@app.route('/signup/', methods=['GET','POST'])
+def signup():
+    form = SignupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        username =request.form.data
+        email = request.form.data
+        password = request.form.data
+        #get data and store in a variable post
+        post= User(username = username, email=email, password=password )
+        #add post variable to db
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('signup.html', form=form)
+        
 #route to index page
+@app.route('/login/', methods=['GET','POST'])
+def login():
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        name = request.form.data
+        password = request.form.data
+        post = User.query.get_by(username = username)
+        if name != 
+
+    return render_template("login.html", form=form)
+
 @app.route('/index/')
 def index():
     return render_template("index.html")
+
 #routes to post
 @app.route('/post')
 def post():
