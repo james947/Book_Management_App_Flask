@@ -1,0 +1,29 @@
+{% from "_formhelpers.html" import render_field %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book manager App</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <form method="POST" action="{{url_for('signup')}}" id="Tform">
+            <h1>Sign Up</h1>
+            <div class="form-group">
+            {{ form.csrf_token }}
+            {{ render_field(form.username, class="form-control", placeholder="Username") }}
+            {{ render_field(form.email, class="form-control", placeholder="Email") }}
+            {{ render_field(form.password, class="form-control", placeholder="Password") }}
+            </div>
+            <button type="submit" class="btn btn-success btn-block">Get started</button>
+            <p>Dont have an account? register to get started <a href="{{url_for("login")}}">Register</a></p>
+        </form>
+    </div>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+</body>
+</html>
