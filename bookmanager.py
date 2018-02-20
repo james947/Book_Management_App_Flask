@@ -37,14 +37,20 @@ class Book(db.Model):
     def __repr__(self):
         return "<Title: {}>".format(self.title)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(80), nullable=False)
+    username = db.Column(db.String(80), nullable=False)
+    password =db.Column(db.String(80), nullable=False)
+
 #routes to signup page
 @app.route('/signup/', methods=['GET','POST'])
 def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
-        username =request.form.data
-        email = request.form.data
-        password = request.form.data
+        username =form.username.data
+        email = form.email.data
+        password =form.password.data
         #get data and store in a variable post
         post= User(username = username, email=email, password=password )
         #add post variable to db
@@ -58,14 +64,15 @@ def signup():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        name = request.form.data
-        password = request.form.data
-        post = User.query.get_by(username = username)
-        if name != 
-
+       user = User.query.filter_by(email=form.email.data).first()
+       if user:
+           if user.email == form.email.data and user.password == form.password.data :
+                return redirect(url_for('index'))
+       return '<h1> Invalid username/password</h1>'
     return render_template("login.html", form=form)
 
 @app.route('/index/')
+@is_logged_in
 def index():
     return render_template("index.html")
 
