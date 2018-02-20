@@ -64,30 +64,32 @@ def addPost():
     return redirect (url_for('post'))
 
 
-@app.route('/editPost', methods=['GET','POST'])
+@app.route('/editPost', methods=['POST'])
 def editPost():
-    book = Book.query.get(Book.id)
-    #request form data
-    book.title = 'title'
-    book.subtitle = 'subtitle'
-    title = request.form['title']
-    subtitle = request.form['subtitle']
-    author = request.form['author']
-    description = request.form['description']
+    if request.method == 'POST':
+        title = request.form['title']
+        subtitle  = request.form['subtitle']
+        author = request.form['author']
+        description =request.form['description']
 
-    #create variable post to add data to db
-    post = Book(title=title, subtitle=subtitle, author=author, description=description, date_posted=datetime.now())
+        found_post =  Book.query.filter_by(id=id).first()
+        Book.title = title
+        Book.subtitle = subtitle
+        Book.author = author
+        Book.description = description
+        #commit to db
+        db.session.commit()
+        return redirect (url_for('post'))
 
-    #commit to db and end session
-    db.session.add(post)
-    db.session.commit()
-    return redirect (url_for('post'))
-    
+@app.route('/show/<int:id>')
+def show(id):
+    found_post =  Book.query.filter_by(id=id).first()
+    return render_template("show.html", found_post= found_post)
+
 #Route to delete a specific book by title
-@app.route("/delete", methods=["POST"])
-def delete():
-    title = request.form.get("title")
-    book = Book.query.filter_by(title=title).first()
+@app.route("/delete/<int:id>")
+def delete(id):
+    book = Book.query.filter_by(id=id).first()
     db.session.delete(book)
     db.session.commit()
     return redirect("post")
