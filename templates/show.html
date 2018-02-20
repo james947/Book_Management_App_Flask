@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <p>Here is the book title {{found_post.title}}</p>
+
+    <form method="POST" action="/editPost" id="Tform">
+        <h1>Edit Books</h1>
+            <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control"  name="title" value="{{found_post.title}}" required>
+            </div>
+            <div class="form-group">
+            <label for="subtitle">Subtitle:</label>
+            <input type="text" class="form-control"  name="subtitle" value="{{found_post.subtitle}}"  required>
+            </div>
+            <div class="form-group">
+            <label for="author">Author:</label>
+            <input type="text" class="form-control"  name="author" value="{{found_post.author}} " required>
+            </div>
+            <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" row=5 name="description" value="{{found_post.description}}" required>
+            </div>
+            <button type="submit" class="btn btn-success btn-block">Update</button>
+    </form>
+</body>
+</html>
