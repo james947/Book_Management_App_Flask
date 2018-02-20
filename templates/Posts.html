@@ -19,24 +19,32 @@
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                {% for book in books %}
-                    <h3>{{book.title}}</h3>
-                    <p>{{book.subtitle}}</p>
-                    <p>{{book.description}}</p>
-                    <p class="post-meta">Posted by {{book.author}} on {{ book.date_posted.strftime('%B %d %Y %X') }}</p>
-                     <a href="/editPost" type="btn-btn-primary">Edit</a> 
+        <div class="">
+            <div class="">
+                <div class="panel panel-default">
+                    <div class="panel panel-heading">Books</div>
+                    {% for book in books %}
+                    </div><!--start of well-->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                        <div class="well">
 
-                     <form method="POST" action="/delete">
-                     <input type="hidden" value="{{book.title}}" name="title">
-                     <input type="submit" class="btn btn-default" value="Delete">
-                     </form>
+                            <h3 style="padding-left:20px;">{{book.title}}</h3>
+                            <p style="padding-left:40px;">{{book.subtitle}}</p>
+                            <p  style="padding-left:40px;">{{book.description}}</p>
+                            <p class="post-meta">Posted by {{book.author}} on {{ book.date_posted.strftime('%B %d %Y %X') }}</p>
+                            <a type="submit" class="btn btn-primary btn-sm" href="{{url_for('show', id=book.id)}}">Edit</a>
+                            <a type="submit" class="btn btn-danger btn-sm" href="{{url_for('delete', id=book.id)}}">Delete</a>
+                        </div><!--end of well-->
+                        <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                        </div>
                     <hr>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        </div>
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/jquery.min.js"></script>
 </body>
