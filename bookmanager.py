@@ -62,14 +62,17 @@ def signup():
 #route to index page
 @app.route('/login/', methods=['GET','POST'])
 def login():
+    error = None
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-       user = User.query.filter_by(email=form.email.data).first()
-       if user:
-           if user.email == form.email.data and user.password == form.password.data :
-                return redirect(url_for('index'))
-       return '<h1> Invalid username/password</h1>'
-    return render_template("login.html", form=form)
+        user = User.query.filter_by(email=form.email.data).first()
+        if user.email == form.email.data and user.password == form.password.data:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('index'))
+        else:
+            error = "Invalid User credentials> Please Try again"
+    return render_template("login.html", form=form, error=error)
 
 @app.route('/index/')
 @is_logged_in
