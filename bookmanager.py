@@ -4,9 +4,11 @@ from flask import Flask, redirect, render_template, request, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from forms import SignupForm, LoginForm
+from flask_modus import Modus
+
 #initializing the app
 app = Flask(__name__)
-
+modus = Modus(app)
 #connect to postgress db
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:8247@localhost/book_data'
 db = SQLAlchemy(app)
@@ -46,33 +48,39 @@ class User(db.Model):
 #routes to signup page
 @app.route('/signup/', methods=['GET','POST'])
 def signup():
+    error = None
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         username =form.username.data
         email = form.email.data
         password =form.password.data
         #get data and store in a variable post
-        post= User(username = username, email=email, password=password )
-        #add post variable to db
-        db.session.add(post)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('signup.html', form=form)
+        dup=User.query.filter_by(email=form.email.data).first()
+        if dup.email == form.email.data:
+             error = 'Email already registered'
+             return render_template('signup.html', form=form, error=error)
+        else:
+             post= User(username = username, email=email, password=password )
+            #add post variable to db
+             db.session.add(post)
+             db.session.commit()
+             flash('successfuly registered')
+             #return redirect(url_for('login'))
+    return render_template('signup.html', form=form, error=error)
         
 #route to index page
 @app.route('/login/', methods=['GET','POST'])
 def login():
-    error = None
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         if user.email == form.email.data and user.password == form.password.data:
             session['logged_in'] = True
-            flash('You were logged in')
+            flash(u'You were logged in')
             return redirect(url_for('index'))
         else:
-            error = "Invalid User credentials> Please Try again"
-    return render_template("login.html", form=form, error=error)
+            flash('Invalid credentials.Try again')
+    return render_template("login.html", form=form)
 
 @app.route('/index/')
 @is_logged_in
@@ -102,21 +110,17 @@ def addPost():
     return redirect (url_for('post'))
 
 
-@app.route('/editPost', methods=['POST'])
-def editPost():
-    if request.method == 'POST':
-        title = request.form['title']
-        subtitle  = request.form['subtitle']
-        author = request.form['author']
-        description =request.form['description']
-
-        found_post =  Book.query.filter_by(id=id).first()
-        Book.title = title
-        Book.subtitle = subtitle
-        Book.author = author
-        Book.description = description
-        #commit to db
+@app.route('/editPost<int:id>', methods=["PATCH"])
+def editPost(id):
+    if request.method ==b'PATCH':
+        found_post =  Book.query.get(id)
+        found_post.title = request.form['title']
+        found_post.subtitle  = request.form['subtitle']
+        found_post.author = request.form['author']
+        found_post.description =request.form['description']
+        found_post.date_posted =datetime.now()
         db.session.commit()
+        flash('Successifully edited your book')
         return redirect (url_for('post'))
 
 @app.route('/show/<int:id>')
