@@ -9,19 +9,18 @@
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-          {% endfor %}
-          </ul>
-        {% endif %}
-      {% endwith %}
-      
     <div class="container">
         <form method="POST" action="/addPost" id="Tform">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+            <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                    {{message}}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
             <h1>Books</h1>
                 <div class="form-group">
                 <label for="title">Title:</label>

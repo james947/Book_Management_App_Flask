@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    <form method="POST" action="/editPost" id="Tform">
+    <form method="POST" action="{{url_for('editPost', id=found_post.id)}}?_method=PATCH" id="Tform">
         <h1>Edit Books</h1>
             <div class="form-group">
             <label for="title">Title:</label>
