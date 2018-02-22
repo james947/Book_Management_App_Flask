@@ -1,4 +1,5 @@
 #import flask
+import os
 from functools import wraps
 from flask import Flask, redirect, render_template, request, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -135,6 +136,13 @@ def delete(id):
     db.session.delete(book)
     db.session.commit()
     return redirect("post")
+
+if os.environ.get('ENV') == 'production':
+    app.config.from_object('config.ProductionConfig')
+    # notice here that we are configuring from a file called "config" and a class inside called "ProductionConfig"
+else:
+    app.config.from_object('config.DevelopmentConfig')
+    # notice here that we are configuring from a file called "config" and a class inside called "DevelopmentConfig"
 
 #runs the app
 if __name__ == "__main__":
