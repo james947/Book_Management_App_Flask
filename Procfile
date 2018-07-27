@@ -1,1 +1,1 @@
-web: gunicorn app:bookmanger
+web: gunicorn bookmanager:app
