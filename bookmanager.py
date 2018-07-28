@@ -83,7 +83,7 @@ def login():
             flash('Invalid credentials.Try again')
     return render_template("login.html", form=form)
 
-@app.route('/index/')
+@app.route('/')
 @is_logged_in
 def index():
     return render_template("index.html")
